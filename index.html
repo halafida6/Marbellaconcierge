@@ -332,12 +332,14 @@
     grid-template-columns: repeat(3, 1fr);
     gap: 16px;
     margin-bottom: 32px;
+    min-width: 0;
   }
 
   .stat {
     background: var(--blue-light);
     padding: 20px;
     border-radius: var(--radius-md);
+    min-width: 0; /* empêche le débordement de la grille sur petit écran */
   }
 
   .stat-number {
@@ -895,7 +897,7 @@
 
   .form-submit {
     width: 100%;
-    background: var(--blue);
+    background: #25D366;
     color: white;
     border: none;
     padding: 18px;
@@ -908,7 +910,7 @@
     font-family: inherit;
   }
 
-  .form-submit:hover { background: var(--blue-hover); transform: translateY(-1px); }
+  .form-submit:hover { background: #1EBE5A; transform: translateY(-1px); }
 
   .form-note {
     text-align: center;
@@ -1211,14 +1213,28 @@
     .footer-grid { grid-template-columns: 1fr; }
     .hero-card { height: 460px; }
     .hero-content { padding: 32px 24px; }
-    .reassure-grid { grid-template-columns: 1fr; }
-    .reassure-card { padding: 48px 24px; }
     .testimonials-track .testimonial { width: 300px; flex-basis: 300px; }
     /* La pastille de localisation chevauchait le titre sur mobile → masquée */
     .hero-location { display: none; }
     /* Réduit l'immense blanc de l'image "À propos" sur petit écran */
     .about-image { height: 280px; }
     .about { padding-top: 32px; }
+    /* Chiffres : plus compacts pour ne jamais déborder à droite */
+    .stats { gap: 10px; }
+    .stat { padding: 14px 10px; }
+    .stat-number { font-size: 22px; }
+    .stat-label { font-size: 11px; }
+    /* Bannière du bas : nettement plus courte sur mobile */
+    .reassure { padding-bottom: 56px; }
+    .reassure-card { padding: 32px 20px; }
+    .reassure-card h2 { font-size: 22px; margin-bottom: 10px; }
+    .reassure-card > p { font-size: 14px; margin-bottom: 24px; }
+    .reassure-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; margin-bottom: 28px; }
+    .reassure-item { padding: 16px 12px; }
+    .reassure-item .ri-emoji { font-size: 22px; margin-bottom: 6px; }
+    .reassure-item h4 { font-size: 14px; }
+    .reassure-item p { font-size: 12px; }
+    .reassure-cta { padding: 14px 24px; font-size: 15px; }
   }
 
   /* === STABILITÉ TACTILE ===
@@ -2021,11 +2037,22 @@
   });
 
   /* =====================================================================
+     AU RECHARGEMENT : revenir EN HAUT (et non sur le formulaire)
+     Quand on a cliqué sur un lien #contact, l'URL garde l'ancre et l'iPhone
+     re-scrolle vers le formulaire au refresh. On neutralise ce comportement.
+     ===================================================================== */
+  if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+
+  /* =====================================================================
      POP-UP D'ENTRÉE
      ===================================================================== */
   let scrollbarComp = 0;
 
   window.addEventListener('load', () => {
+    // Retire l'ancre (#contact…) et remonte en haut de page
+    if (location.hash) history.replaceState(null, '', location.pathname + location.search);
+    window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+
     setTimeout(() => {
       if (!sessionStorage.getItem('popupShown')) {
         openPopup();
