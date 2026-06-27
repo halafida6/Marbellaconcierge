@@ -645,6 +645,33 @@
     gap: 20px;
   }
 
+  /* === CARROUSEL AUTO (avis qui défilent en boucle) === */
+  .testimonials-marquee {
+    overflow: hidden;
+    -webkit-mask-image: linear-gradient(to right, transparent, #000 5%, #000 95%, transparent);
+    mask-image: linear-gradient(to right, transparent, #000 5%, #000 95%, transparent);
+  }
+
+  .testimonials-track {
+    display: flex;
+    width: max-content;
+    animation: marquee 50s linear infinite;
+  }
+
+  /* Le défilement se met en pause au survol (pour pouvoir lire un avis) */
+  .testimonials-track:hover { animation-play-state: paused; }
+
+  .testimonials-track .testimonial {
+    width: 360px;
+    flex: 0 0 360px;
+    margin-right: 20px;
+  }
+
+  @keyframes marquee {
+    from { transform: translateX(0); }
+    to   { transform: translateX(-50%); }
+  }
+
   .testimonial {
     background: white;
     border: 1px solid var(--border);
@@ -888,15 +915,6 @@
     font-size: 13px;
     color: var(--text-muted);
     margin-top: 16px;
-  }
-
-  .form-saved-note {
-    text-align: center;
-    font-size: 12px;
-    color: var(--blue);
-    margin-top: 10px;
-    min-height: 16px;
-    transition: opacity 0.3s;
   }
 
   /* === BANNIÈRE DE RÉASSURANCE (sous le formulaire) === */
@@ -1195,6 +1213,7 @@
     .hero-content { padding: 32px 24px; }
     .reassure-grid { grid-template-columns: 1fr; }
     .reassure-card { padding: 48px 24px; }
+    .testimonials-track .testimonial { width: 300px; flex-basis: 300px; }
   }
 
   /* === STABILITÉ TACTILE ===
@@ -1500,17 +1519,10 @@
         <h2 class="section-title">Ce qu'ils en disent.</h2>
         <p class="section-subtitle" style="margin-bottom: 0;">Plus de 1000 voyageurs nous ont fait confiance pour leur séjour à Marbella.</p>
       </div>
-      <div class="testimonials-arrows">
-        <button class="arrow-btn" type="button" aria-label="Précédent">
-          <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
-        </button>
-        <button class="arrow-btn" type="button" aria-label="Suivant">
-          <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
-        </button>
-      </div>
     </div>
 
-    <div class="testimonials-grid">
+    <div class="testimonials-marquee">
+      <div class="testimonials-track" id="testimonialsTrack">
       <div class="testimonial">
         <div class="testimonial-header">
           <div class="testimonial-user">
@@ -1606,6 +1618,7 @@
         </div>
         <p class="testimonial-text">"Voyage entre potes à 10, on cherchait du sérieux et de la réactivité. Réponse sur WhatsApp en quelques minutes, prix partenaires imbattables, zéro mauvaise surprise sur place. Du grand professionnalisme."</p>
       </div>
+      </div>
     </div>
   </div>
 </section>
@@ -1698,7 +1711,6 @@
         </div>
 
         <button type="submit" class="form-submit">Envoyer sur WhatsApp →</button>
-        <p class="form-saved-note" id="savedNote"></p>
         <p class="form-note">Réponse personnalisée sous quelques heures.</p>
 
       </form>
@@ -1890,7 +1902,6 @@
   function saveLeadLocal() {
     try {
       localStorage.setItem(LEAD_KEY, JSON.stringify(collectLead()));
-      flashSavedNote();
     } catch (e) { /* localStorage indisponible : on ignore */ }
   }
 
@@ -1946,17 +1957,6 @@
     }
   }
 
-  // Petit message "Vos informations sont enregistrées"
-  let savedNoteTimer;
-  function flashSavedNote() {
-    const note = document.getElementById('savedNote');
-    if (!note) return;
-    note.textContent = '✓ Vos informations sont enregistrées automatiquement.';
-    note.style.opacity = '1';
-    clearTimeout(savedNoteTimer);
-    savedNoteTimer = setTimeout(() => { note.style.opacity = '0'; }, 2500);
-  }
-
   // Brancher l'autosave LOCAL sur tous les champs (debounce léger)
   let saveTimer;
   function scheduleSave() {
@@ -1984,7 +1984,23 @@
       el.addEventListener('change', () => { scheduleSave(); scheduleDbSend(); });
       el.addEventListener('blur', scheduleDbSend, true);
     });
+    initTestimonialsCarousel();
   });
+
+  /* =====================================================================
+     CARROUSEL DES AVIS — défilement automatique en boucle
+     On duplique les cartes pour que le défilement soit infini et sans saut.
+     ===================================================================== */
+  function initTestimonialsCarousel() {
+    const track = document.getElementById('testimonialsTrack');
+    if (!track) return;
+    const cards = Array.prototype.slice.call(track.children);
+    cards.forEach(card => {
+      const clone = card.cloneNode(true);
+      clone.setAttribute('aria-hidden', 'true');
+      track.appendChild(clone);
+    });
+  }
 
   // Le client quitte / met la page en arrière-plan sans avoir envoyé → on enregistre
   function handleExit() {
