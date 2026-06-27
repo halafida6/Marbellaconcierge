@@ -1214,6 +1214,11 @@
     .reassure-grid { grid-template-columns: 1fr; }
     .reassure-card { padding: 48px 24px; }
     .testimonials-track .testimonial { width: 300px; flex-basis: 300px; }
+    /* La pastille de localisation chevauchait le titre sur mobile → masquée */
+    .hero-location { display: none; }
+    /* Réduit l'immense blanc de l'image "À propos" sur petit écran */
+    .about-image { height: 280px; }
+    .about { padding-top: 32px; }
   }
 
   /* === STABILITÉ TACTILE ===
@@ -1286,7 +1291,7 @@
         Marbella, Costa del Sol
       </div>
       <div class="hero-content">
-        <h1>Marbella,<br>organisée <span style="color:#A5C9FF;">pour vous</span>.</h1>
+        <h1>Marbella,<br>organisée <span style="color:#A5C9FF;">pour vous.</span></h1>
         <p class="hero-subtitle">Villas, beach clubs, restaurants, nightlife, activités. Un seul contact. Tout est réglé avant votre arrivée.</p>
       </div>
     </div>
@@ -1980,8 +1985,12 @@
   document.addEventListener('DOMContentLoaded', () => {
     restoreLead();
     document.querySelectorAll('input, select, textarea').forEach(el => {
-      el.addEventListener('input', () => { scheduleSave(); scheduleDbSend(); });
-      el.addEventListener('change', () => { scheduleSave(); scheduleDbSend(); });
+      // Sauvegarde locale à chaque frappe (anti-perte, gratuit)
+      el.addEventListener('input', scheduleSave);
+      el.addEventListener('change', scheduleSave);
+      // Envoi en BASE uniquement quand on QUITTE un champ (pas à chaque frappe)
+      // → très peu d'écritures. Grâce au Lead ID, tout est regroupé sur UNE
+      // seule ligne par visiteur (mise à jour, pas de doublon).
       el.addEventListener('blur', scheduleDbSend, true);
     });
     initTestimonialsCarousel();

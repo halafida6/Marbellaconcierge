@@ -92,9 +92,12 @@ function doPost(e) {
   }
 }
 
-// Permet de tester l'URL dans un navigateur (doit afficher "Marbella OK").
+// Permet de vérifier dans un navigateur QUELLE version est réellement en
+// ligne. Après re-déploiement, l'URL .../exec doit afficher "Marbella OK v2".
+// Si vous voyez encore "Marbella OK" (sans v2), c'est que l'ancienne version
+// est toujours déployée → refaites "Gérer les déploiements ▸ Nouvelle version".
 function doGet() {
-  return ContentService.createTextOutput('Marbella OK');
+  return ContentService.createTextOutput('Marbella OK v2');
 }
 
 /* ======================================================================
