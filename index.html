@@ -1,0 +1,1926 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Marbella Concierge — Votre séjour, organisé.</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/themes/airbnb.css">
+<style>
+  :root {
+    --blue: #2563EB;
+    --blue-hover: #1E40AF;
+    --blue-light: #EFF4FF;
+    --navy: #0F1B3D;
+    --bg: #FFFFFF;
+    --bg-soft: #F9FAFB;
+    --text: #0F172A;
+    --text-muted: #64748B;
+    --border: #E5E7EB;
+    --star: #F59E0B;
+    --shadow-sm: 0 1px 3px rgba(15, 27, 61, 0.08);
+    --shadow-md: 0 4px 16px rgba(15, 27, 61, 0.08);
+    --shadow-lg: 0 12px 32px rgba(15, 27, 61, 0.10);
+    --radius-sm: 12px;
+    --radius-md: 16px;
+    --radius-lg: 24px;
+    --radius-xl: 32px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html {
+    scroll-behavior: smooth;
+    /* Stabilité : empêche les déplacements horizontaux et le zoom auto du texte */
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+    overflow-x: hidden;
+  }
+
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    color: var(--text);
+    background: var(--bg);
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+    width: 100%;
+    /* Stabilité : pas de rebond/scroll latéral, pas de flash gris au tap mobile */
+    overscroll-behavior-x: none;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  /* Stabilité : aucun élément ne peut déborder horizontalement */
+  img, svg, video, iframe { max-width: 100%; }
+
+  .container {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 0 32px;
+  }
+
+  /* === NAVIGATION === */
+  nav {
+    position: sticky;
+    top: 0;
+    background: rgba(255, 255, 255, 0.9);
+    backdrop-filter: saturate(180%) blur(20px);
+    -webkit-backdrop-filter: saturate(180%) blur(20px);
+    border-bottom: 1px solid var(--border);
+    z-index: 100;
+    padding: 16px 0;
+  }
+
+  .nav-inner {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 0 32px;
+    gap: 32px;
+  }
+
+  .logo {
+    font-weight: 700;
+    font-size: 20px;
+    letter-spacing: -0.02em;
+    color: var(--text);
+  }
+
+  .logo span { color: var(--blue); }
+
+  .nav-links {
+    display: flex;
+    gap: 32px;
+  }
+
+  .nav-links a {
+    color: var(--text);
+    text-decoration: none;
+    font-size: 15px;
+    font-weight: 500;
+    transition: color 0.2s;
+  }
+
+  .nav-links a:hover { color: var(--blue); }
+
+  .nav-cta {
+    background: var(--blue);
+    color: white;
+    padding: 10px 22px;
+    border-radius: 999px;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 500;
+    transition: background 0.2s, transform 0.2s;
+  }
+  .nav-cta:hover { background: var(--blue-hover); transform: translateY(-1px); }
+
+  /* === HERO === */
+  .hero {
+    padding: 32px 0 64px;
+  }
+
+  .hero-card {
+    position: relative;
+    border-radius: var(--radius-xl);
+    overflow: hidden;
+    height: 520px;
+    background: #1a3a5c;
+  }
+
+  .hero-card img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .hero-card::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(15, 27, 61, 0.55) 0%, rgba(15, 27, 61, 0.1) 60%, transparent 100%);
+  }
+
+  .hero-content {
+    position: relative;
+    z-index: 2;
+    padding: 64px;
+    color: white;
+    max-width: 720px;
+  }
+
+  .hero h1 {
+    font-size: clamp(36px, 5vw, 64px);
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    line-height: 1.05;
+    margin-bottom: 20px;
+  }
+
+  .hero h1 br + span { display: block; }
+
+  .hero-subtitle {
+    font-size: 17px;
+    color: rgba(255, 255, 255, 0.92);
+    max-width: 480px;
+    line-height: 1.55;
+  }
+
+  .hero-location {
+    position: absolute;
+    top: 32px;
+    right: 32px;
+    z-index: 2;
+    color: white;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(10px);
+    padding: 8px 16px;
+    border-radius: 999px;
+  }
+
+  /* === SEARCH BAR sous hero === */
+  .search-bar {
+    background: white;
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-lg);
+    padding: 16px;
+    margin: -56px auto 0;
+    max-width: 920px;
+    position: relative;
+    z-index: 10;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr auto;
+    gap: 12px;
+    align-items: center;
+  }
+
+  .search-field {
+    padding: 10px 16px;
+    border-radius: var(--radius-sm);
+    transition: background 0.2s;
+    cursor: pointer;
+  }
+
+  .search-field:hover { background: var(--bg-soft); }
+
+  .search-field label {
+    display: block;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 4px;
+  }
+
+  .search-field input,
+  .search-field select {
+    border: none;
+    background: transparent;
+    font-size: 14px;
+    color: var(--text-muted);
+    width: 100%;
+    font-family: inherit;
+    outline: none;
+  }
+
+  .search-field input::placeholder { color: var(--text-muted); }
+
+  .search-submit {
+    background: var(--blue);
+    color: white;
+    border: none;
+    padding: 14px 28px;
+    border-radius: 999px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.2s;
+    font-family: inherit;
+    white-space: nowrap;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .search-submit:hover { background: var(--blue-hover); transform: translateY(-1px); }
+
+  /* === SECTIONS === */
+  section {
+    padding: 96px 0;
+  }
+
+  .section-eyebrow {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--blue);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 12px;
+    display: inline-block;
+  }
+
+  .section-title {
+    font-size: clamp(32px, 4vw, 48px);
+    font-weight: 700;
+    letter-spacing: -0.025em;
+    line-height: 1.1;
+    margin-bottom: 16px;
+    color: var(--text);
+  }
+
+  .section-subtitle {
+    font-size: 17px;
+    color: var(--text-muted);
+    max-width: 580px;
+    margin-bottom: 56px;
+    line-height: 1.55;
+  }
+
+  /* === ABOUT / POURQUOI === */
+  .about {
+    padding-top: 64px;
+  }
+
+  .about-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 64px;
+    align-items: center;
+  }
+
+  .about-image {
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    height: 480px;
+  }
+
+  .about-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .about-content h2 {
+    font-size: clamp(32px, 4vw, 44px);
+    font-weight: 700;
+    letter-spacing: -0.025em;
+    margin-bottom: 20px;
+  }
+
+  .about-content p {
+    color: var(--text-muted);
+    font-size: 16px;
+    line-height: 1.6;
+    margin-bottom: 32px;
+  }
+
+  .stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin-bottom: 32px;
+  }
+
+  .stat {
+    background: var(--blue-light);
+    padding: 20px;
+    border-radius: var(--radius-md);
+  }
+
+  .stat-number {
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--blue);
+    letter-spacing: -0.02em;
+  }
+
+  .stat-label {
+    font-size: 13px;
+    color: var(--text-muted);
+    margin-top: 4px;
+  }
+
+  .btn-outline {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: white;
+    color: var(--text);
+    padding: 12px 24px;
+    border-radius: 999px;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 500;
+    border: 1px solid var(--border);
+    transition: all 0.2s;
+  }
+  .btn-outline:hover { border-color: var(--text); }
+
+  /* === 3 PROFILS === */
+  .profils-section {
+    background: var(--bg-soft);
+  }
+
+  .profils-header {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    margin-bottom: 48px;
+    gap: 48px;
+  }
+
+  .profils-header div { max-width: 600px; }
+
+  .profils-grid {
+    display: grid;
+    grid-template-columns: 1fr 1.2fr 1fr;
+    gap: 20px;
+  }
+
+  .profil-card {
+    background: white;
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    box-shadow: var(--shadow-sm);
+    transition: transform 0.3s, box-shadow 0.3s;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .profil-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-lg);
+  }
+
+  .profil-image {
+    height: 220px;
+    overflow: hidden;
+    position: relative;
+  }
+
+  .profil-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s;
+  }
+
+  .profil-card:hover .profil-image img { transform: scale(1.05); }
+
+  .profil-badge {
+    position: absolute;
+    top: 16px;
+    left: 16px;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    padding: 6px 12px;
+    border-radius: 999px;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    color: var(--text);
+  }
+
+  .profil-card.featured .profil-badge {
+    background: var(--blue);
+    color: white;
+  }
+
+  .profil-body {
+    padding: 28px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .profil-title {
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    margin-bottom: 10px;
+    line-height: 1.2;
+  }
+
+  .profil-desc {
+    font-size: 14px;
+    color: var(--text-muted);
+    line-height: 1.6;
+    margin-bottom: 24px;
+    flex-grow: 1;
+  }
+
+  .profil-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 20px;
+    border-top: 1px solid var(--border);
+  }
+
+  .profil-price {
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: var(--text);
+  }
+
+  .profil-price span {
+    font-size: 13px;
+    font-weight: 400;
+    color: var(--text-muted);
+  }
+
+  .profil-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    color: var(--blue);
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 600;
+    transition: gap 0.2s;
+    background: none;
+    border: none;
+    font-family: inherit;
+    cursor: pointer;
+    padding: 0;
+  }
+  .profil-link:hover { gap: 8px; }
+
+  /* === SERVICES === */
+  .services-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+  }
+
+  .service-card {
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    position: relative;
+    height: 320px;
+    cursor: pointer;
+    transition: transform 0.3s;
+  }
+
+  .service-card:hover { transform: translateY(-4px); }
+
+  .service-card img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s;
+  }
+
+  .service-card:hover img { transform: scale(1.08); }
+
+  .service-card::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, transparent 40%, rgba(15, 27, 61, 0.85) 100%);
+  }
+
+  .service-content {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 24px;
+    z-index: 2;
+    color: white;
+  }
+
+  .service-content h3 {
+    font-size: 20px;
+    font-weight: 700;
+    letter-spacing: -0.015em;
+    margin-bottom: 6px;
+  }
+
+  .service-content p {
+    font-size: 14px;
+    color: rgba(255, 255, 255, 0.85);
+    line-height: 1.5;
+  }
+
+  /* === WHY CHOOSE US === */
+  .why {
+    background: var(--bg-soft);
+  }
+
+  .why-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 32px;
+  }
+
+  .why-card {
+    text-align: left;
+  }
+
+  .why-icon {
+    width: 56px;
+    height: 56px;
+    background: var(--blue-light);
+    border-radius: var(--radius-md);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+    color: var(--blue);
+  }
+
+  .why-icon svg { width: 28px; height: 28px; }
+
+  .why-card h3 {
+    font-size: 18px;
+    font-weight: 700;
+    letter-spacing: -0.015em;
+    margin-bottom: 8px;
+  }
+
+  .why-card p {
+    font-size: 14px;
+    color: var(--text-muted);
+    line-height: 1.55;
+  }
+
+  /* === TÉMOIGNAGES === */
+  .testimonials-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-bottom: 48px;
+    gap: 48px;
+  }
+
+  .testimonials-arrows {
+    display: flex;
+    gap: 8px;
+  }
+
+  .arrow-btn {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: white;
+    border: 1px solid var(--border);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text);
+    transition: all 0.2s;
+  }
+
+  .arrow-btn:hover {
+    border-color: var(--text);
+    background: var(--text);
+    color: white;
+  }
+
+  .testimonials-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+  }
+
+  .testimonial {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 28px;
+    transition: box-shadow 0.3s;
+  }
+
+  .testimonial:hover { box-shadow: var(--shadow-md); }
+
+  .testimonial-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+  }
+
+  .testimonial-user {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .testimonial-avatar {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    overflow: hidden;
+    background: var(--blue-light);
+  }
+
+  .testimonial-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .testimonial-name {
+    font-weight: 600;
+    font-size: 15px;
+  }
+
+  .testimonial-rating {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 14px;
+    font-weight: 600;
+  }
+
+  .testimonial-rating svg {
+    width: 16px;
+    height: 16px;
+    fill: var(--star);
+  }
+
+  .testimonial-text {
+    font-size: 14px;
+    color: var(--text-muted);
+    line-height: 1.6;
+  }
+
+  /* === CTA SECTION === */
+  .cta-section {
+    padding: 64px 0;
+  }
+
+  .cta-card {
+    position: relative;
+    border-radius: var(--radius-xl);
+    overflow: hidden;
+    height: 340px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+  }
+
+  .cta-card img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .cta-card::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: rgba(15, 27, 61, 0.55);
+  }
+
+  .cta-content {
+    position: relative;
+    z-index: 2;
+    color: white;
+    padding: 0 32px;
+  }
+
+  .cta-content h2 {
+    font-size: clamp(32px, 4.5vw, 48px);
+    font-weight: 700;
+    letter-spacing: -0.025em;
+    margin-bottom: 16px;
+  }
+
+  .cta-content p {
+    font-size: 17px;
+    color: rgba(255, 255, 255, 0.9);
+    margin-bottom: 28px;
+    max-width: 480px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .btn-white {
+    background: white;
+    color: var(--text);
+    padding: 14px 32px;
+    border-radius: 999px;
+    text-decoration: none;
+    font-size: 15px;
+    font-weight: 600;
+    display: inline-block;
+    transition: transform 0.2s;
+  }
+
+  .btn-white:hover { transform: translateY(-2px); }
+
+  /* === FORMULAIRE === */
+  .form-section {
+    background: var(--bg-soft);
+  }
+
+  .form-wrapper {
+    max-width: 720px;
+    margin: 0 auto;
+    background: white;
+    border-radius: var(--radius-lg);
+    padding: 48px;
+    box-shadow: var(--shadow-md);
+  }
+
+  .form-wrapper .section-title {
+    font-size: 32px;
+    text-align: center;
+    margin-bottom: 8px;
+  }
+
+  .form-wrapper .section-subtitle {
+    text-align: center;
+    margin: 0 auto 36px;
+    font-size: 15px;
+  }
+
+  .form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 16px;
+  }
+
+  .form-group {
+    margin-bottom: 16px;
+  }
+
+  .form-group label {
+    display: block;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 8px;
+  }
+
+  .form-group input,
+  .form-group select,
+  .form-group textarea {
+    width: 100%;
+    padding: 14px 16px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    font-size: 16px; /* 16px = empêche le zoom auto / déplacement sur iOS au focus */
+    font-family: inherit;
+    color: var(--text);
+    background: white;
+    transition: border-color 0.2s;
+  }
+
+  .form-group input:focus,
+  .form-group select:focus,
+  .form-group textarea:focus {
+    outline: none;
+    border-color: var(--blue);
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+  }
+
+  .checkbox-group {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+    margin-top: 8px;
+  }
+
+  .checkbox-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 14px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    font-size: 14px;
+    transition: all 0.2s;
+    background: white;
+  }
+
+  .checkbox-item:hover { border-color: var(--blue); }
+
+  .checkbox-item input { accent-color: var(--blue); }
+
+  .form-submit {
+    width: 100%;
+    background: var(--blue);
+    color: white;
+    border: none;
+    padding: 18px;
+    border-radius: 999px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    margin-top: 24px;
+    transition: background 0.2s, transform 0.2s;
+    font-family: inherit;
+  }
+
+  .form-submit:hover { background: var(--blue-hover); transform: translateY(-1px); }
+
+  .form-note {
+    text-align: center;
+    font-size: 13px;
+    color: var(--text-muted);
+    margin-top: 16px;
+  }
+
+  .form-saved-note {
+    text-align: center;
+    font-size: 12px;
+    color: var(--blue);
+    margin-top: 10px;
+    min-height: 16px;
+    transition: opacity 0.3s;
+  }
+
+  /* === FOOTER === */
+  footer {
+    background: var(--navy);
+    color: rgba(255, 255, 255, 0.7);
+    padding: 64px 0 32px;
+  }
+
+  .footer-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1.5fr;
+    gap: 48px;
+    margin-bottom: 48px;
+  }
+
+  footer .logo {
+    color: white;
+    margin-bottom: 16px;
+    display: block;
+  }
+
+  footer p { font-size: 13px; line-height: 1.7; }
+
+  .footer-col h4 {
+    color: white;
+    font-size: 14px;
+    margin-bottom: 16px;
+    font-weight: 600;
+  }
+
+  .footer-col ul {
+    list-style: none;
+  }
+
+  .footer-col ul li {
+    margin-bottom: 10px;
+  }
+
+  .footer-col a {
+    color: rgba(255, 255, 255, 0.7);
+    text-decoration: none;
+    font-size: 13px;
+    transition: color 0.2s;
+  }
+
+  .footer-col a:hover { color: white; }
+
+  .footer-bottom {
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    padding-top: 24px;
+    display: flex;
+    justify-content: space-between;
+    font-size: 12px;
+    opacity: 0.6;
+  }
+
+  /* === POP-UP === */
+  .popup-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(15, 27, 61, 0.65);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    padding: 24px;
+    animation: fadeIn 0.4s ease;
+    overflow-y: auto;
+  }
+
+  .popup-overlay.active { display: flex; }
+
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  .popup {
+    background: white;
+    border-radius: var(--radius-lg);
+    max-width: 460px;
+    width: 100%;
+    padding: 40px 36px;
+    position: relative;
+    text-align: center;
+    animation: slideUp 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+    margin: auto;
+  }
+
+  @keyframes slideUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .popup-close {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    background: var(--bg-soft);
+    border: none;
+    color: var(--text-muted);
+    font-size: 20px;
+    cursor: pointer;
+    line-height: 1;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s;
+  }
+  .popup-close:hover { background: var(--border); }
+
+  .popup-eyebrow {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--blue);
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    margin-bottom: 16px;
+  }
+
+  .popup h2 {
+    font-size: 26px;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    line-height: 1.15;
+    margin-bottom: 10px;
+    color: var(--text);
+  }
+
+  .popup p {
+    font-size: 14px;
+    color: var(--text-muted);
+    margin-bottom: 24px;
+    line-height: 1.55;
+  }
+
+  .popup .form-group { text-align: left; }
+
+  .popup-submit {
+    width: 100%;
+    background: var(--blue);
+    color: white;
+    border: none;
+    padding: 16px;
+    border-radius: 999px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    margin-top: 8px;
+    transition: background 0.2s;
+    font-family: inherit;
+  }
+  .popup-submit:hover { background: var(--blue-hover); }
+
+  /* Flatpickr customization */
+  .flatpickr-day.selected,
+  .flatpickr-day.startRange,
+  .flatpickr-day.endRange,
+  .flatpickr-day.selected.inRange,
+  .flatpickr-day.startRange.inRange,
+  .flatpickr-day.endRange.inRange {
+    background: var(--blue) !important;
+    border-color: var(--blue) !important;
+  }
+
+  .flatpickr-day.inRange {
+    background: var(--blue-light) !important;
+    border-color: var(--blue-light) !important;
+    box-shadow: -5px 0 0 var(--blue-light), 5px 0 0 var(--blue-light) !important;
+  }
+
+  /* === RESPONSIVE === */
+  @media (max-width: 960px) {
+    .about-grid,
+    .profils-grid,
+    .services-grid,
+    .why-grid,
+    .testimonials-grid {
+      grid-template-columns: 1fr;
+    }
+    .why-grid { grid-template-columns: repeat(2, 1fr); }
+    .hero-content { padding: 40px; }
+    .search-bar { grid-template-columns: 1fr; }
+    .form-row { grid-template-columns: 1fr; }
+    .checkbox-group { grid-template-columns: 1fr; }
+    .form-wrapper { padding: 32px 24px; }
+    .footer-grid { grid-template-columns: 1fr 1fr; }
+    .profils-header,
+    .testimonials-header {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+    .nav-links { display: none; }
+  }
+
+  @media (max-width: 600px) {
+    .container { padding: 0 20px; }
+    section { padding: 64px 0; }
+    .why-grid { grid-template-columns: 1fr; }
+    .footer-grid { grid-template-columns: 1fr; }
+    .hero-card { height: 460px; }
+    .hero-content { padding: 32px 24px; }
+  }
+
+  /* === STABILITÉ TACTILE ===
+     Sur écrans tactiles (mobile/tablette), les effets de survol "transform"
+     se déclenchent au simple tap et donnent l'impression que le site "bouge".
+     On les neutralise pour les appareils sans vrai survol. */
+  @media (hover: none), (pointer: coarse) {
+    .nav-cta:hover,
+    .search-submit:hover,
+    .form-submit:hover,
+    .btn-white:hover,
+    .btn-outline:hover,
+    .profil-card:hover,
+    .service-card:hover,
+    .testimonial:hover {
+      transform: none;
+    }
+    .profil-card:hover .profil-image img,
+    .service-card:hover img { transform: none; }
+  }
+
+  /* Lock du scroll quand la pop-up est ouverte (évite le saut de mise en page) */
+  body.popup-open { overflow: hidden; }
+</style>
+</head>
+<body>
+
+<!-- ========== POP-UP D'ENTRÉE ========== -->
+<div class="popup-overlay" id="entryPopup">
+  <div class="popup">
+    <button class="popup-close" onclick="closePopup()" aria-label="Fermer">×</button>
+    <span class="popup-eyebrow">Marbella · Été 2026</span>
+    <h2>Votre séjour commence ici.</h2>
+    <p>Laissez-nous vos coordonnées. Notre équipe vous prépare un itinéraire sur-mesure.</p>
+    <form id="popupForm" onsubmit="submitPopup(event)">
+      <div class="form-group">
+        <label for="popup-name">Prénom</label>
+        <input type="text" id="popup-name" required placeholder="Ex. Camille">
+      </div>
+      <div class="form-group">
+        <label for="popup-phone">Numéro WhatsApp</label>
+        <input type="tel" id="popup-phone" required placeholder="+33 6 ...">
+      </div>
+      <button type="submit" class="popup-submit">Découvrir nos services →</button>
+    </form>
+  </div>
+</div>
+
+<!-- ========== NAVIGATION ========== -->
+<nav>
+  <div class="nav-inner">
+    <div class="logo">Marbella<span>.</span></div>
+    <div class="nav-links">
+      <a href="#about">À propos</a>
+      <a href="#services">Services</a>
+      <a href="#testimonials">Avis</a>
+      <a href="#contact">Contact</a>
+    </div>
+    <a href="#contact" class="nav-cta">Nous contacter</a>
+  </div>
+</nav>
+
+<!-- ========== HERO ========== -->
+<header class="hero">
+  <div class="container">
+    <div class="hero-card">
+      <img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=1600&q=80" alt="Marbella beach">
+      <div class="hero-location">
+        <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+        Marbella, Costa del Sol
+      </div>
+      <div class="hero-content">
+        <h1>Marbella,<br>organisée <span style="color:#A5C9FF;">pour vous</span>.</h1>
+        <p class="hero-subtitle">Villas, beach clubs, restaurants, nightlife, activités. Un seul contact. Tout est réglé avant votre arrivée.</p>
+      </div>
+    </div>
+
+    <!-- Search Bar -->
+    <div class="search-bar">
+      <div class="search-field" onclick="document.getElementById('hero-people').focus()">
+        <label>Nombre de personnes</label>
+        <input type="number" id="hero-people" min="1" placeholder="2 personnes">
+      </div>
+      <div class="search-field" onclick="document.getElementById('hero-dates').focus()">
+        <label>Dates de séjour</label>
+        <input type="text" id="hero-dates" placeholder="Choisir les dates" readonly>
+      </div>
+      <div class="search-field">
+        <label>Type de séjour</label>
+        <select id="hero-type">
+          <option value="">Sélectionner</option>
+          <option value="Couple">Couple</option>
+          <option value="Friends">Groupe d'amis</option>
+          <option value="Girls Trip">Girls Trip</option>
+          <option value="Family">Famille</option>
+          <option value="EVJF / EVG">EVJF / EVG</option>
+        </select>
+      </div>
+      <button class="search-submit" onclick="scrollToForm()">
+        <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+        Rechercher
+      </button>
+    </div>
+  </div>
+</header>
+
+<!-- ========== ABOUT ========== -->
+<section class="about" id="about">
+  <div class="container">
+    <div class="about-grid">
+      <div class="about-image">
+        <img src="https://images.unsplash.com/photo-1519046904884-53103b34b206?w=1200&q=80" alt="Marbella aerial view">
+      </div>
+      <div class="about-content">
+        <span class="section-eyebrow">À propos</span>
+        <h2>Nous connaissons Marbella mieux que personne.</h2>
+        <p>Notre équipe vit ici toute l'année. Nous travaillons directement avec les meilleurs établissements de la Costa del Sol — beach clubs, restaurants, clubs, villas privées. Vous n'avez qu'à nous dire ce que vous voulez vivre.</p>
+        <div class="stats">
+          <div class="stat">
+            <div class="stat-number">50+</div>
+            <div class="stat-label">Partenaires premium</div>
+          </div>
+          <div class="stat">
+            <div class="stat-number">200+</div>
+            <div class="stat-label">Villas privées</div>
+          </div>
+          <div class="stat">
+            <div class="stat-number">1000+</div>
+            <div class="stat-label">Séjours organisés</div>
+          </div>
+        </div>
+        <a href="#contact" class="btn-outline">
+          En savoir plus
+          <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== 3 PROFILS ========== -->
+<section class="profils-section">
+  <div class="container">
+    <div class="profils-header">
+      <div>
+        <span class="section-eyebrow">Pour qui</span>
+        <h2 class="section-title">Trois manières<br>de partir à Marbella.</h2>
+        <p class="section-subtitle" style="margin-bottom: 0;">Choisissez l'approche qui correspond à votre situation. Nous prenons le relais à partir de là.</p>
+      </div>
+    </div>
+
+    <div class="profils-grid">
+
+      <div class="profil-card">
+        <div class="profil-image">
+          <span class="profil-badge">01 / VOL RÉSERVÉ</span>
+          <img src="https://images.unsplash.com/photo-1602002418082-a4443e081dd1?w=900&q=80" alt="Marbella street">
+        </div>
+        <div class="profil-body">
+          <h3 class="profil-title">Itinéraire sur-mesure</h3>
+          <p class="profil-desc">Vol réservé, dates calées, mais rien d'organisé sur place. On construit votre séjour : logement, soirées, activités, restos. Vous arrivez, tout est prêt.</p>
+          <div class="profil-footer">
+            <div class="profil-price">Sur devis <span>· selon services</span></div>
+            <button type="button" class="profil-link" onclick="goToForm('')">Demander →</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="profil-card featured">
+        <div class="profil-image">
+          <span class="profil-badge">⭐ GIRLS TRIP</span>
+          <img src="https://images.unsplash.com/photo-1530549387789-4c1017266635?w=900&q=80" alt="Beach club">
+        </div>
+        <div class="profil-body">
+          <h3 class="profil-title">Package Girls Marbella</h3>
+          <p class="profil-desc">Accès gratuit aux meilleurs beach clubs (normalement 1 500€+ le bed). Réductions exclusives dans les grands restaurants. Planning complet organisé. Pour les groupes de femmes uniquement.</p>
+          <div class="profil-footer">
+            <div class="profil-price">150€ <span>/personne · tout compris</span></div>
+            <button type="button" class="profil-link" onclick="goToForm('Girls Trip')">Réserver →</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="profil-card">
+        <div class="profil-image">
+          <span class="profil-badge">02 / RIEN RÉSERVÉ</span>
+          <img src="https://images.unsplash.com/photo-1540541338287-41700207dee6?w=900&q=80" alt="Luxury villa">
+        </div>
+        <div class="profil-body">
+          <h3 class="profil-title">Prise en charge complète</h3>
+          <p class="profil-desc">De la villa au transfert, des tables VIP aux activités en groupe. Vous nous dites ce que vous voulez vivre. Nous nous occupons de tout, de A à Z.</p>
+          <div class="profil-footer">
+            <div class="profil-price">Sur devis <span>· pack complet</span></div>
+            <button type="button" class="profil-link" onclick="goToForm('')">Être pris en charge →</button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ========== SERVICES ========== -->
+<section id="services">
+  <div class="container">
+    <span class="section-eyebrow">Notre réseau</span>
+    <h2 class="section-title">Tout ce qu'il vous faut,<br>en un seul contact.</h2>
+    <p class="section-subtitle">Notre réseau couvre tout ce qui fait Marbella. Nous travaillons directement avec les meilleurs établissements.</p>
+
+    <div class="services-grid">
+      <div class="service-card">
+        <img src="https://images.unsplash.com/photo-1582268611958-ebfd161ef9cf?w=900&q=80" alt="Villas">
+        <div class="service-content">
+          <h3>Villas privées</h3>
+          <p>Sélection premium · Puerto Banús, La Zagaleta, Sierra Blanca</p>
+        </div>
+      </div>
+      <div class="service-card">
+        <img src="https://images.unsplash.com/photo-1531058020387-3be344556be6?w=900&q=80" alt="Beach club">
+        <div class="service-content">
+          <h3>Beach clubs</h3>
+          <p>Nikki Beach, Ocean Club, La Sala by the Sea · accès garanti</p>
+        </div>
+      </div>
+      <div class="service-card">
+        <img src="https://images.unsplash.com/photo-1566737236500-c8ac43014a67?w=900&q=80" alt="Nightlife">
+        <div class="service-content">
+          <h3>Nightlife & VIP</h3>
+          <p>Tables, guestlist, bouteilles dans les clubs les plus exclusifs</p>
+        </div>
+      </div>
+      <div class="service-card">
+        <img src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=900&q=80" alt="Restaurant">
+        <div class="service-content">
+          <h3>Restaurants</h3>
+          <p>Les meilleures tables de la Costa del Sol · tarifs partenaires</p>
+        </div>
+      </div>
+      <div class="service-card">
+        <img src="https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?w=900&q=80" alt="Yacht">
+        <div class="service-content">
+          <h3>Yachts & activités</h3>
+          <p>Yachts privés, jet ski, padel, golf · programme sur-mesure</p>
+        </div>
+      </div>
+      <div class="service-card">
+        <img src="https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=900&q=80" alt="Chauffeur">
+        <div class="service-content">
+          <h3>Transferts</h3>
+          <p>Chauffeur 24/7 · aéroport, soirées, journées plage</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== WHY CHOOSE US ========== -->
+<section class="why">
+  <div class="container">
+    <span class="section-eyebrow">Pourquoi nous</span>
+    <h2 class="section-title">Pourquoi nous choisir ?</h2>
+    <p class="section-subtitle">Un séjour fluide, abordable, mémorable. Et zéro stress.</p>
+
+    <div class="why-grid">
+      <div class="why-card">
+        <div class="why-icon">
+          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+        </div>
+        <h3>Partenaires de confiance</h3>
+        <p>Nous travaillons uniquement avec des établissements vérifiés et premium.</p>
+      </div>
+      <div class="why-card">
+        <div class="why-icon">
+          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+        </div>
+        <h3>Réservation simplifiée</h3>
+        <p>Logement, sorties, activités · tout est centralisé en un seul échange.</p>
+      </div>
+      <div class="why-card">
+        <div class="why-icon">
+          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 8h6m-5 0a3 3 0 110 6H9l3 3m-3-6h6m6 1a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+        </div>
+        <h3>Tarifs partenaires</h3>
+        <p>Accès à des prix que vous ne trouverez nulle part ailleurs.</p>
+      </div>
+      <div class="why-card">
+        <div class="why-icon">
+          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192l-3.536 3.536M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-5 0a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
+        </div>
+        <h3>Support 24/7</h3>
+        <p>Notre équipe reste joignable pendant tout votre séjour. À tout moment.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== TÉMOIGNAGES ========== -->
+<section id="testimonials">
+  <div class="container">
+    <div class="testimonials-header">
+      <div>
+        <span class="section-eyebrow">Avis clients</span>
+        <h2 class="section-title">Ce qu'ils en disent.</h2>
+        <p class="section-subtitle" style="margin-bottom: 0;">Plus de 1000 voyageurs nous ont fait confiance pour leur séjour à Marbella.</p>
+      </div>
+      <div class="testimonials-arrows">
+        <button class="arrow-btn" type="button" aria-label="Précédent">
+          <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
+        </button>
+        <button class="arrow-btn" type="button" aria-label="Suivant">
+          <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <div class="testimonials-grid">
+      <div class="testimonial">
+        <div class="testimonial-header">
+          <div class="testimonial-user">
+            <div class="testimonial-avatar">
+              <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=200&q=80" alt="Camille">
+            </div>
+            <div class="testimonial-name">Camille L.</div>
+          </div>
+          <div class="testimonial-rating">
+            <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            4.9
+          </div>
+        </div>
+        <p class="testimonial-text">"Première fois qu'on partait à 8 entre filles, on ne savait pas par où commencer. Le package Girls Trip nous a tout organisé. Beach clubs gratuits, planning au top, on a juste profité. Imbattable."</p>
+      </div>
+
+      <div class="testimonial">
+        <div class="testimonial-header">
+          <div class="testimonial-user">
+            <div class="testimonial-avatar">
+              <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=200&q=80" alt="Maya">
+            </div>
+            <div class="testimonial-name">Maya P.</div>
+          </div>
+          <div class="testimonial-rating">
+            <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            4.7
+          </div>
+        </div>
+        <p class="testimonial-text">"On avait nos billets mais zéro plan sur place. En 48h, on avait un itinéraire complet, une villa magnifique et des tables réservées partout. Service hyper réactif sur WhatsApp."</p>
+      </div>
+
+      <div class="testimonial">
+        <div class="testimonial-header">
+          <div class="testimonial-user">
+            <div class="testimonial-avatar">
+              <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=200&q=80" alt="Wanda">
+            </div>
+            <div class="testimonial-name">Wanda M.</div>
+          </div>
+          <div class="testimonial-rating">
+            <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            4.8
+          </div>
+        </div>
+        <p class="testimonial-text">"Equipe disponible et réactive. Quand notre vol a été retardé, ils ont décalé tout le planning sans souci. Vraiment satisfaite, on revient l'année prochaine sans hésiter."</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== CTA ========== -->
+<section class="cta-section">
+  <div class="container">
+    <div class="cta-card">
+      <img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=1600&q=80" alt="Marbella beach">
+      <div class="cta-content">
+        <h2>Votre séjour à Marbella commence ici.</h2>
+        <p>Contactez-nous aujourd'hui et profitez d'un itinéraire personnalisé sous 24h.</p>
+        <a href="#contact" class="btn-white">Nous contacter →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== FORMULAIRE ========== -->
+<section class="form-section" id="contact">
+  <div class="container">
+    <div class="form-wrapper">
+      <h2 class="section-title">Parlez-nous de votre séjour.</h2>
+      <p class="section-subtitle">Quelques informations pour préparer votre itinéraire. Nous vous répondons sur WhatsApp.</p>
+
+      <form id="qualificationForm" onsubmit="submitForm(event)">
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="firstname">Prénom *</label>
+            <input type="text" id="firstname" required>
+          </div>
+          <div class="form-group">
+            <label for="lastname">Nom *</label>
+            <input type="text" id="lastname" required>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="email">Email *</label>
+            <input type="email" id="email" required placeholder="vous@email.com">
+          </div>
+          <div class="form-group">
+            <label for="phone">Numéro WhatsApp *</label>
+            <input type="tel" id="phone" required placeholder="+33 6 ...">
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="dates">Dates de séjour *</label>
+            <input type="text" id="dates" required placeholder="Sélectionner les dates" readonly>
+          </div>
+          <div class="form-group">
+            <label for="people">Nombre de personnes *</label>
+            <input type="number" id="people" min="1" required>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="type">Type de séjour *</label>
+          <select id="type" required>
+            <option value="">Sélectionner...</option>
+            <option value="Couple">Couple</option>
+            <option value="Friends">Groupe d'amis</option>
+            <option value="Girls Trip">Girls Trip (package 150€/pers)</option>
+            <option value="Family">Famille</option>
+            <option value="EVJF">EVJF</option>
+            <option value="EVG">EVG</option>
+            <option value="Business">Business</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Services souhaités</label>
+          <div class="checkbox-group">
+            <label class="checkbox-item"><input type="checkbox" name="services" value="Villa"><span>Villa / logement</span></label>
+            <label class="checkbox-item"><input type="checkbox" name="services" value="Beach clubs"><span>Beach clubs</span></label>
+            <label class="checkbox-item"><input type="checkbox" name="services" value="Nightlife"><span>Nightlife / VIP</span></label>
+            <label class="checkbox-item"><input type="checkbox" name="services" value="Dinner"><span>Restaurants</span></label>
+            <label class="checkbox-item"><input type="checkbox" name="services" value="Yacht & activités"><span>Yachts / activités</span></label>
+            <label class="checkbox-item"><input type="checkbox" name="services" value="Transferts"><span>Transferts</span></label>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="message">Quelque chose à préciser ?</label>
+          <textarea id="message" rows="3" placeholder="Budget approximatif, occasion spéciale, attentes particulières..."></textarea>
+        </div>
+
+        <button type="submit" class="form-submit">Envoyer sur WhatsApp →</button>
+        <p class="form-saved-note" id="savedNote"></p>
+        <p class="form-note">Réponse personnalisée sous quelques heures.</p>
+
+      </form>
+    </div>
+  </div>
+</section>
+
+<!-- ========== FOOTER ========== -->
+<footer>
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-col">
+        <span class="logo">Marbella<span style="color:#A5C9FF;">.</span></span>
+        <p>Conciergerie privée à Marbella, Costa del Sol. Votre séjour, organisé de A à Z.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Liens rapides</h4>
+        <ul>
+          <li><a href="#about">À propos</a></li>
+          <li><a href="#services">Services</a></li>
+          <li><a href="#testimonials">Avis clients</a></li>
+          <li><a href="#contact">Contact</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Services</h4>
+        <ul>
+          <li><a href="#contact">Villas privées</a></li>
+          <li><a href="#contact">Beach clubs</a></li>
+          <li><a href="#contact">Nightlife</a></li>
+          <li><a href="#contact">Girls Trip</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Contact</h4>
+        <ul>
+          <li><a href="#contact">WhatsApp</a></li>
+          <li><a href="#">Instagram</a></li>
+          <li><a href="mailto:contact@marbella.com">contact@marbella.com</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 Marbella Concierge. Tous droits réservés.</span>
+      <span>Mentions légales · Confidentialité</span>
+    </div>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<script src="https://npmcdn.com/flatpickr/dist/l10n/fr.js"></script>
+<script>
+  /* =====================================================================
+     CONFIGURATION
+     ===================================================================== */
+
+  // ⚠️ REMPLACER par le vrai numéro WhatsApp (format international, sans + ni espaces)
+  const WHATSAPP_NUMBER = "34600000000";
+
+  // ⚠️ ENREGISTREMENT DES LEADS DANS VOTRE BASE DE DONNÉES
+  // Collez ici l'URL de votre point d'entrée (endpoint) qui reçoit les leads.
+  // Exemples gratuits et faciles :
+  //   • Google Sheets via un script Google Apps Script déployé en "Web App"
+  //   • Formspree, Make.com / Zapier (webhook), Supabase, Airtable, etc.
+  // Le site enverra automatiquement, en POST (JSON), TOUTES les infos du
+  // formulaire — même si le client ne clique pas sur "Envoyer". Vous pourrez
+  // ainsi relancer les clients non contactés.
+  // Tant que ce champ est vide, les données restent enregistrées localement
+  // (dans le navigateur du client) et le reste du site fonctionne normalement.
+  const LEAD_ENDPOINT = "";
+
+  /* =====================================================================
+     DATEPICKER (Flatpickr range mode)
+     ===================================================================== */
+  let selectedDates = [];
+
+  flatpickr("#dates", {
+    mode: "range",
+    locale: "fr",
+    minDate: "today",
+    dateFormat: "d.m.y",
+    onChange: function(dates) {
+      selectedDates = dates;
+      saveLeadLocal();
+    }
+  });
+
+  flatpickr("#hero-dates", {
+    mode: "range",
+    locale: "fr",
+    minDate: "today",
+    dateFormat: "d.m.y"
+  });
+
+  /* =====================================================================
+     CAPTURE & ENREGISTREMENT DES LEADS
+     - Sauvegarde locale (localStorage) à chaque frappe → restaurée si le
+       client revient ou recharge la page.
+     - Envoi à votre base de données :
+         • quand le client soumet la pop-up
+         • quand le client envoie le formulaire WhatsApp
+         • quand le client QUITTE la page sans avoir envoyé (relance possible)
+     ===================================================================== */
+  const LEAD_KEY = 'marbella_lead';
+  let leadSentFull = false;
+
+  function val(id) {
+    const el = document.getElementById(id);
+    return el ? (el.value || '').trim() : '';
+  }
+
+  function collectLead(extra) {
+    const services = Array.from(document.querySelectorAll('input[name="services"]:checked')).map(c => c.value);
+    const data = {
+      prenom:       val('firstname') || val('popup-name'),
+      nom:          val('lastname'),
+      email:        val('email'),
+      whatsapp:     val('phone') || val('popup-phone'),
+      dates:        val('dates') || val('hero-dates'),
+      personnes:    val('people') || val('hero-people'),
+      type:         val('type') || val('hero-type'),
+      services:     services.join(', '),
+      message:      val('message'),
+      page:         location.href,
+      date_capture: new Date().toISOString()
+    };
+    if (extra) Object.assign(data, extra);
+    return data;
+  }
+
+  function hasContactInfo(d) {
+    return !!(d.prenom || d.whatsapp || d.email);
+  }
+
+  // Sauvegarde locale (toujours disponible, sans configuration)
+  function saveLeadLocal() {
+    try {
+      localStorage.setItem(LEAD_KEY, JSON.stringify(collectLead()));
+      flashSavedNote();
+    } catch (e) { /* localStorage indisponible : on ignore */ }
+  }
+
+  // Envoi vers votre base de données (si LEAD_ENDPOINT configuré)
+  function sendLeadToDatabase(status) {
+    const data = collectLead({ statut: status || 'partiel' });
+    if (!hasContactInfo(data)) return;          // rien d'utile à enregistrer
+    saveLeadLocal();
+    if (!LEAD_ENDPOINT) return;                  // pas d'endpoint → local seulement
+
+    try {
+      const body = JSON.stringify(data);
+      // sendBeacon est fiable même quand la page se ferme (cas "abandon")
+      if (navigator.sendBeacon) {
+        const blob = new Blob([body], { type: 'application/json' });
+        navigator.sendBeacon(LEAD_ENDPOINT, blob);
+      } else {
+        fetch(LEAD_ENDPOINT, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: body,
+          keepalive: true,
+          mode: 'no-cors'
+        });
+      }
+    } catch (e) { /* on n'interrompt jamais l'expérience client */ }
+  }
+
+  // Restauration des données déjà saisies (anti-perte)
+  function restoreLead() {
+    let data;
+    try { data = JSON.parse(localStorage.getItem(LEAD_KEY)); } catch (e) {}
+    if (!data) return;
+    const set = (id, v) => { const el = document.getElementById(id); if (el && v && !el.value) el.value = v; };
+    set('firstname', data.prenom);  set('popup-name', data.prenom);
+    set('lastname', data.nom);
+    set('email', data.email);
+    set('phone', data.whatsapp);    set('popup-phone', data.whatsapp);
+    set('dates', data.dates);
+    set('people', data.personnes);
+    set('hero-people', data.personnes);
+    set('type', data.type);
+    set('message', data.message);
+    if (data.services) {
+      data.services.split(', ').forEach(v => {
+        const cb = document.querySelector('input[name="services"][value="' + v + '"]');
+        if (cb) cb.checked = true;
+      });
+    }
+  }
+
+  // Petit message "Vos informations sont enregistrées"
+  let savedNoteTimer;
+  function flashSavedNote() {
+    const note = document.getElementById('savedNote');
+    if (!note) return;
+    note.textContent = '✓ Vos informations sont enregistrées automatiquement.';
+    note.style.opacity = '1';
+    clearTimeout(savedNoteTimer);
+    savedNoteTimer = setTimeout(() => { note.style.opacity = '0'; }, 2500);
+  }
+
+  // Brancher l'autosave sur tous les champs (debounce léger)
+  let saveTimer;
+  function scheduleSave() {
+    clearTimeout(saveTimer);
+    saveTimer = setTimeout(saveLeadLocal, 400);
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    restoreLead();
+    document.querySelectorAll('input, select, textarea').forEach(el => {
+      el.addEventListener('input', scheduleSave);
+      el.addEventListener('change', scheduleSave);
+    });
+  });
+
+  // Le client quitte / met la page en arrière-plan sans avoir envoyé → on enregistre
+  function handleExit() {
+    if (!leadSentFull) sendLeadToDatabase('abandon');
+  }
+  window.addEventListener('pagehide', handleExit);
+  document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState === 'hidden') handleExit();
+  });
+
+  /* =====================================================================
+     POP-UP D'ENTRÉE
+     ===================================================================== */
+  let scrollbarComp = 0;
+
+  window.addEventListener('load', () => {
+    setTimeout(() => {
+      if (!sessionStorage.getItem('popupShown')) {
+        openPopup();
+        sessionStorage.setItem('popupShown', 'true');
+      }
+    }, 1500);
+  });
+
+  function openPopup() {
+    // Compense la largeur de la scrollbar pour éviter le saut horizontal
+    scrollbarComp = window.innerWidth - document.documentElement.clientWidth;
+    if (scrollbarComp > 0) document.body.style.paddingRight = scrollbarComp + 'px';
+    document.body.classList.add('popup-open');
+    document.getElementById('entryPopup').classList.add('active');
+  }
+
+  function closePopup() {
+    document.getElementById('entryPopup').classList.remove('active');
+    document.body.classList.remove('popup-open');
+    document.body.style.paddingRight = '';
+  }
+
+  function submitPopup(e) {
+    e.preventDefault();
+    const name = document.getElementById('popup-name').value;
+    const phone = document.getElementById('popup-phone').value;
+
+    document.getElementById('firstname').value = name;
+    document.getElementById('phone').value = phone;
+
+    // Enregistre immédiatement le lead (pop-up = premier contact)
+    sendLeadToDatabase('popup');
+
+    closePopup();
+
+    setTimeout(() => {
+      document.getElementById('contact').scrollIntoView({ behavior: 'smooth' });
+    }, 300);
+  }
+
+  // Sauvegarde aussi ce qui est tapé dans la pop-up, en direct
+  ['popup-name', 'popup-phone'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.addEventListener('input', scheduleSave);
+  });
+
+  /* =====================================================================
+     NAVIGATION VERS LE FORMULAIRE
+     ===================================================================== */
+  function scrollToForm() {
+    // Transférer les valeurs du hero vers le formulaire principal
+    const heroPeople = document.getElementById('hero-people').value;
+    const heroDates = document.getElementById('hero-dates').value;
+    const heroType = document.getElementById('hero-type').value;
+
+    if (heroPeople) document.getElementById('people').value = heroPeople;
+    if (heroDates) document.getElementById('dates').value = heroDates;
+    if (heroType) {
+      // Aligne la valeur du hero ("Friends", "Girls Trip"...) sur le <select> du formulaire
+      const typeSelect = document.getElementById('type');
+      if ([...typeSelect.options].some(o => o.value === heroType)) typeSelect.value = heroType;
+    }
+    saveLeadLocal();
+    document.getElementById('contact').scrollIntoView({ behavior: 'smooth' });
+  }
+
+  // Boutons de la section "Trois manières de partir à Marbella"
+  // → amène directement au formulaire du bas et place le curseur dessus.
+  function goToForm(type) {
+    if (type) {
+      const typeSelect = document.getElementById('type');
+      if (typeSelect && [...typeSelect.options].some(o => o.value === type)) {
+        typeSelect.value = type;
+      }
+    }
+    saveLeadLocal();
+    const target = document.getElementById('contact');
+    target.scrollIntoView({ behavior: 'smooth' });
+    setTimeout(() => {
+      const first = document.getElementById('firstname');
+      if (first && !first.value) first.focus({ preventScroll: true });
+    }, 600);
+  }
+
+  /* =====================================================================
+     FORMULAIRE → MESSAGE WHATSAPP PRÉ-DÉFINI
+     ===================================================================== */
+  function submitForm(e) {
+    e.preventDefault();
+
+    const firstname = val('firstname');
+    const lastname  = val('lastname');
+    const email     = val('email');
+    const phone     = val('phone');
+    const dates     = val('dates');
+    const people    = val('people');
+    const type      = val('type');
+    const message   = val('message');
+
+    const services = Array.from(document.querySelectorAll('input[name="services"]:checked'))
+      .map(cb => cb.value)
+      .join(', ');
+
+    // Enregistre le lead complet dans la base AVANT d'ouvrir WhatsApp
+    leadSentFull = true;
+    sendLeadToDatabase('formulaire envoyé');
+
+    // Libellé du groupe : "4 girls" / "6 friends" / "2 couple"...
+    let groupLabel;
+    if (type === 'Girls Trip') groupLabel = people + ' girls';
+    else if (type === 'Friends') groupLabel = people + ' friends';
+    else if (type === 'Couple') groupLabel = people + ' couple';
+    else if (type === 'Family') groupLabel = people + ' family';
+    else if (type === 'EVJF') groupLabel = people + ' EVJF';
+    else if (type === 'EVG') groupLabel = people + ' EVG';
+    else if (type === 'Business') groupLabel = people + ' business';
+    else groupLabel = (people || '?') + ' pax';
+
+    // === MESSAGE PRÉ-DÉFINI envoyé sur WhatsApp ===
+    let waMessage = '';
+    waMessage += 'Bonjour Marbella Concierge ! 👋\n';
+    waMessage += "Je souhaite organiser mon séjour. Voici mes informations :\n\n";
+    waMessage += '• Groupe : ' + groupLabel + '\n';
+    waMessage += '• Nom : ' + firstname + ' ' + lastname + '\n';
+    waMessage += '• Email : ' + email + '\n';
+    waMessage += '• WhatsApp : ' + phone + '\n';
+    if (dates)    waMessage += '• Dates : ' + dates + '\n';
+    if (services) waMessage += '• Services souhaités : ' + services + '\n';
+    if (message)  waMessage += '\nPrécisions : ' + message + '\n';
+    waMessage += '\nMerci de me préparer un itinéraire sur-mesure. 🌴';
+
+    const url = 'https://wa.me/' + WHATSAPP_NUMBER + '?text=' + encodeURIComponent(waMessage);
+    window.open(url, '_blank');
+  }
+</script>
+
+</body>
+</html>
